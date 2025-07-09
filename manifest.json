@@ -1,0 +1,22 @@
+{
+  "name": "Todo List Application",
+  "short_name": "TodoList",
+  "description": "A simple, interactive Todo List application built with vanilla JavaScript",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#b1e8fd",
+  "theme_color": "#639ca0",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "images/favicon128.ico",
+      "sizes": "128x128",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "images/favicon256.ico",
+      "sizes": "256x256",
+      "type": "image/x-icon"
+    }
+  ]
+}

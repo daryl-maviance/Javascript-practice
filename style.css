@@ -16,6 +16,8 @@
     border-radius: 5px;
 }
 
+
+
 .done {
     border-radius: 5px;
     background-color: #d4edda;
@@ -59,3 +61,29 @@ body {
     background-color: rgb(177, 232, 253);
     font-family: 'Times New Roman', Times, serif;
 }
+
+
+/* Responsive styling for mobile phones */
+@media (max-width: 600px) {
+    .todo-list {
+        width: 90%;
+        max-width: 350px;
+        padding: 15px;
+    }
+    
+    .todo-list li {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+    
+    .add-task {
+        width: 90%;
+        max-width: 350px;
+    }
+    
+    body {
+        padding: 10px;
+    }
+}
+

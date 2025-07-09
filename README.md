@@ -4,9 +4,9 @@
 
 Try out the Todo List application directly in your browser! The live demo is hosted on Netlify and includes all the features described below.
 
-## Todo List Application
+# DOM Practice - Todo List PWA
 
-A modern, interactive Todo List application built with vanilla JavaScript, HTML, and CSS. This project demonstrates DOM manipulation, event handling, local storage, and asynchronous JavaScript concepts.
+A modern, interactive Todo List Progressive Web Application (PWA) built with vanilla JavaScript, HTML, and CSS. This project demonstrates DOM manipulation, event handling, local storage, service workers, and asynchronous JavaScript concepts.
 
 ## Preview
 
@@ -18,8 +18,12 @@ A modern, interactive Todo List application built with vanilla JavaScript, HTML,
 - **Status Management**: Toggle task completion status via dropdown menu
 - **Delete Tasks**: Remove tasks with confirmation dialog
 - **Data Persistence**: All tasks are saved to localStorage for session persistence
+- **Responsive Design**: Clean, modern UI that works across devices
 - **Asynchronous Data Loading**: Simulates API calls with Promise-based data fetching
 - **Event Delegation**: Efficient event handling for dynamic content
+- **Progressive Web App (PWA)**: Installable app with offline functionality
+- **Service Worker**: Enables offline caching and improved performance
+- **Mobile-First Design**: Optimized for both desktop and mobile devices
 
 ## 📁 Project Structure
 
@@ -28,8 +32,14 @@ javascript_dom_practice/
 ├── index.html          # Main HTML file
 ├── script.js           # Main JavaScript application logic
 ├── style.css          # Styling and responsive design
+├── service-worker.js   # Service worker for PWA functionality
+├── manifest.json       # Web app manifest for PWA
 ├── mockData.js        # Sample data structure
-└── README.md          # Project documentation
+├── README.md          # Project documentation
+└── images/            # Static assets
+    ├── favicon128.ico
+    ├── favicon256.ico
+    └── preview.png
 ```
 
 ## 🛠️ Technologies Used
@@ -43,6 +53,11 @@ javascript_dom_practice/
   - Promises and async/await
   - ES6 modules
   - Array methods (map, filter, find)
+- **Progressive Web App (PWA)**:
+  - Service Worker for offline functionality
+  - Web App Manifest for installability
+  - Cache API for resource caching
+  - Background sync capabilities
 
 ## 🏃‍♂️ Getting Started
 
@@ -92,6 +107,31 @@ javascript_dom_practice/
 1. Click the **"Delete"** button next to any task
 2. Confirm deletion in the dialog prompt
 3. Task will be permanently removed from your list
+
+### Installing as PWA
+1. **On Desktop**: Look for the install icon in your browser's address bar
+2. **On Mobile**: Use "Add to Home Screen" option in browser menu
+3. **Offline Usage**: Once installed, the app works without internet connection
+
+## 📱 Progressive Web App Features
+
+### **Service Worker Implementation**
+- **Offline Functionality**: App works without internet connection
+- **Caching Strategy**: Static resources cached for instant loading
+- **Background Sync**: Future updates can sync when connection returns
+- **Performance**: Faster loading through intelligent caching
+
+### **Web App Manifest**
+- **Installable**: Add to home screen on mobile/desktop
+- **App-like Experience**: Runs in standalone mode
+- **Custom Branding**: App name, icons, and theme colors
+- **Responsive Icons**: Multiple icon sizes for different devices
+
+### **Mobile Optimization**
+- **Responsive Design**: Adapts to all screen sizes
+- **Touch-Friendly**: Optimized button sizes and spacing
+- **Mobile-First**: Designed primarily for mobile experience
+- **Portrait Orientation**: Optimized for vertical screen usage
 
 ## 🏗️ Code Architecture
 
@@ -201,6 +241,11 @@ This project demonstrates:
 - ✅ ES6+ modern JavaScript features
 - ✅ Modular code organization
 - ✅ Data persistence strategies
+- ✅ Progressive Web App development
+- ✅ Service Worker implementation
+- ✅ Offline-first application design
+- ✅ Web App Manifest configuration
+- ✅ Mobile-responsive design patterns
 
 ## 🤝 Contributing
 
