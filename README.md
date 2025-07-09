@@ -8,9 +8,15 @@ Try out the Todo List application directly in your browser! The live demo is hos
 
 A modern, interactive Todo List Progressive Web Application (PWA) built with vanilla JavaScript, HTML, and CSS. This project demonstrates DOM manipulation, event handling, local storage, service workers, and asynchronous JavaScript concepts.
 
-## Preview
+## 📷 Preview
 
+### Desktop View
 ![Todo List Application Preview](images/preview.png)
+
+### Mobile View
+![Todo List Mobile Preview](images/preview_mobile.png)
+
+The application features a fully responsive design that adapts seamlessly between desktop and mobile devices, with optimized layouts for each screen size.
 
 ## 🚀 Features
 

@@ -6,7 +6,8 @@ const urlsToCache = [
     '/script.js',
     '/style.css',
     '/manifest.json',
-    '/images/favicon256.ico'
+    '/images/favicon128.ico',
+    '/images/favicon256.png'
 ]
 
 self.addEventListener("install", event =>{

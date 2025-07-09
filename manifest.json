@@ -9,14 +9,24 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "images/favicon128.ico",
-      "sizes": "128x128",
-      "type": "image/x-icon"
+      "src": "images/app_icon256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    }
+  ],
+   "screenshots": [
+    {
+     "src": "images/preview.png",
+      "sizes": "993x739",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Main Preview"
     },
     {
-      "src": "images/favicon256.ico",
-      "sizes": "256x256",
-      "type": "image/x-icon"
+      "src":"images/preview_mobile.png",
+      "sizes": "383x796",
+      "type": "image/png",
+      "label": "Mobile View"
     }
-  ]
+]
 }
