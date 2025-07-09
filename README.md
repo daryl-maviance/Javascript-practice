@@ -1,6 +1,6 @@
 ## 🌐 Live Demo
 
-🚀 **[View Live Application](https://silver-marigold-b76bbf.netlify.app/)**
+🚀 **[View Live Application](https://daryl-todo-list.netlify.app/)**
 
 Try out the Todo List application directly in your browser! The live demo is hosted on Netlify and includes all the features described below.
 
