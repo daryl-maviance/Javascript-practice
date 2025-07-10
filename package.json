@@ -1,0 +1,23 @@
+{
+  "name": "javascript_dom_practice",
+  "version": "1.0.0",
+  "description": "A simple, interactive Todo List application built with vanilla JavaScript",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daryl-maviance/Javascript-practice.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/daryl-maviance/Javascript-practice/issues"
+  },
+  "homepage": "https://github.com/daryl-maviance/Javascript-practice#readme",
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}

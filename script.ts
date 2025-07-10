@@ -1,49 +1,55 @@
-"use strict";
 // ========================
 // DATA MANAGEMENT
 // ========================
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-let mockDataString = localStorage.getItem("mockData");
-let mockData = mockDataString ? JSON.parse(mockDataString) : { tasks: [] };
+
+/**
+ * Load existing data from localStorage or initialize as null
+ * This allows the app to persist data between sessions
+ */
+
+interface Todo{
+    id: number;
+    title:string;
+    completed:boolean
+}
+
+interface MockData{
+    tasks: Todo[];
+}
+
+let mockDataString: string | null =  localStorage.getItem("mockData");
+let mockData: MockData = mockDataString ? JSON.parse(mockDataString) : { tasks: [] };
+
 /**
  * Simulates an asynchronous data fetch operation
  * @returns {Promise} Promise that resolves with mockData or rejects if no data
  */
-function fetchData() {
-    return __awaiter(this, void 0, void 0, function* () {
-        return new Promise((resolve, reject) => {
-            if (!mockData) {
-                reject("No data available");
-            }
-            else {
-                // Simulate network delay
-                setTimeout(function () {
-                    resolve(mockData);
-                }, 2000);
-            }
-        });
+async function fetchData(): Promise<MockData> {
+    return new Promise((resolve, reject) => {
+        if (!mockData) {
+            reject("No data available");
+        } else {
+            // Simulate network delay
+            setTimeout(function() {
+                resolve(mockData);
+            }, 2000);
+        }
     });
 }
+
 // ========================
 // UI RENDERING FUNCTIONS
 // ========================
+
 /**
  * Creates and displays the todo list in the DOM
  * @param {Array} todos - Array of todo objects to display
  */
-function displayTodos(todos) {
-    var _a;
+function displayTodos(todos:Todo[]) {
     // Create the main ul container
     let ul = document.createElement("ul");
     ul.className = "todo-list";
+
     // Map each todo to a list item element
     let todoList = todos.map(todo => {
         let li = document.createElement("li");
@@ -57,106 +63,125 @@ function displayTodos(todos) {
                         <button class="delete">Delete</button>`;
         return li;
     });
+    
     // Append all list items to the ul container
     todoList.forEach(li => ul.appendChild(li));
+    
     // Add the complete list to the root element
-    (_a = document.querySelector("#root")) === null || _a === void 0 ? void 0 : _a.appendChild(ul);
+    document.querySelector("#root")?.appendChild(ul);
 }
+
 /**
  * Creates and sets up the main UI elements
  */
 function setupUI() {
-    var _a, _b;
     // Create heading
     let heading = document.createElement("h1");
     heading.textContent = "Todo List";
+    
     // Create add task button
     let addTask = document.createElement("button");
     addTask.textContent = "Add Task";
     addTask.className = "add-task";
+    
     // Append main elements to the DOM
-    (_a = document.querySelector("#root")) === null || _a === void 0 ? void 0 : _a.appendChild(heading);
-    (_b = document.querySelector("#root")) === null || _b === void 0 ? void 0 : _b.appendChild(addTask);
+    document.querySelector("#root")?.appendChild(heading);
+    document.querySelector("#root")?.appendChild(addTask);
+    
     // Setup event listeners after elements are created
     setupEventListeners(addTask);
 }
+
 // ========================
 // EVENT HANDLING
 // ========================
+
 /**
  * Sets up all event listeners for the application
  * @param {HTMLElement} addTaskButton - The add task button element
  */
-function setupEventListeners(addTaskButton) {
+function setupEventListeners(addTaskButton:HTMLButtonElement) {
     // Add task button click handler
     addTaskButton.addEventListener("click", handleAddTask);
+    
     // Delete button click handler (using event delegation)
     document.addEventListener("click", handleDeleteTask);
+    
     // Status change handler (using event delegation)
     document.addEventListener("change", handleStatusChange);
-    console.log("settting  up event listeners");
+    console.log("settting  up event listeners")
 }
+
 /**
  * Handles adding a new task
  */
 function handleAddTask() {
-    let newTask = prompt("Enter new task title:");
+    let newTask:string | null = prompt("Enter new task title:");
+    
     if (newTask) {
         // Create new todo object
-        let newTodo = {
+        let newTodo: Todo = {
             id: mockData.tasks.length + 1,
             title: newTask,
             completed: false
         };
+        
         // Add to data and save to localStorage
         mockData.tasks.push(newTodo);
         localStorage.setItem("mockData", JSON.stringify(mockData));
+        
         // Refresh the display
         refreshTodoDisplay();
-    }
-    else {
+    } else {
         alert("Task title cannot be empty!");
     }
 }
+
 /**
  * Handles deleting a task (using event delegation)
  * @param {Event} event - The click event
  */
-function handleDeleteTask(event) {
-    const target = event.target;
+function handleDeleteTask(event:Event) {
+    const target = event.target as HTMLElement;
     // Only handle clicks on delete buttons
     if (target.classList.contains("delete")) {
         let confirmDelete = confirm("Are you sure you want to delete this task?");
-        if (!confirmDelete)
-            return; // Exit if user cancels
-        let taskId = target.closest("li").id;
-        let mostRecentDataString = localStorage.getItem("mockData");
-        let mostRecentData = mostRecentDataString ? JSON.parse(mostRecentDataString) : { tasks: [] };
+        if (!confirmDelete) return; // Exit if user cancels
+        let taskId = target.closest("li")!.id;
+        let mostRecentDataString:string | null = localStorage.getItem("mockData")
+        let mostRecentData: MockData  = mostRecentDataString? JSON.parse(mostRecentDataString) : {tasks:[]};
+        
         // Filter out the task to be deleted
         mostRecentData.tasks = mostRecentData.tasks.filter(task => task.id.toString() != taskId);
+        
         // Save updated data and refresh display
         localStorage.setItem("mockData", JSON.stringify(mostRecentData));
         mockData = mostRecentData; // Update local reference
         refreshTodoDisplay();
     }
 }
+
 /**
  * Handles changing the status of a task (using event delegation)
  * @param {Event} event - The change event from the select dropdown
  */
-function handleStatusChange(event) {
-    const target = event.target;
+function handleStatusChange(event:Event) {
+
+    const target = event.target as HTMLSelectElement;
     // Only handle changes on status select dropdowns
     if (target.classList.contains("status-select")) {
-        let taskId = parseInt(target.dataset.taskId);
+        let taskId = parseInt(target.dataset.taskId!);
         let newStatus = target.value === "done"; // "done" = true, "not-done" = false
+        
         // Get current data from localStorage
-        let mostRecentDataString = localStorage.getItem("mockData");
-        let mostRecentData = mostRecentDataString ? JSON.parse(mostRecentDataString) : { tasks: [] };
+        let mostRecentDataString:string | null = localStorage.getItem("mockData")
+        let mostRecentData: MockData  = mostRecentDataString? JSON.parse(mostRecentDataString) : {tasks:[]};
+        
         // Find and update the task
         let taskToUpdate = mostRecentData.tasks.find(task => task.id === taskId);
         if (taskToUpdate) {
             taskToUpdate.completed = newStatus;
+            
             // Save updated data and refresh display
             localStorage.setItem("mockData", JSON.stringify(mostRecentData));
             mockData = mostRecentData; // Update local reference
@@ -164,53 +189,65 @@ function handleStatusChange(event) {
         }
     }
 }
+
 // ========================
 // UTILITY FUNCTIONS
 // ========================
+
 /**
  * Refreshes the todo list display by removing the old list and creating a new one
  */
 function refreshTodoDisplay() {
-    var _a;
     // Remove existing todo list if it exists
-    (_a = document.querySelector(".todo-list")) === null || _a === void 0 ? void 0 : _a.remove();
-    // Display updated todos
+    document.querySelector(".todo-list")?.remove();
+    
+// Display updated todos
     if (mockData.tasks.length === 0) {
         console.warn("No tasks available.");
         alert("No tasks available.");
-    }
-    else {
+    
+    }else{
         displayTodos(mockData.tasks);
     }
 }
+
 // ========================
 // APPLICATION INITIALIZATION
 // ========================
+
 /**
  * Initialize the application
  */
 function initializeApp() {
     //register  the  service worker
+
     if ("serviceWorker" in navigator) {
         navigator.serviceWorker.register('/service-worker.js')
-            .then(() => console.log("service  worker registered"))
-            .catch(error => console.error("Service worker registration failed:", error));
+        .then(()=> console.log("service  worker registered"))
+        .catch(error => console.error("Service worker registration failed:", error));
     }
+
     // Setup the main UI elements
     setupUI();
+    
     // Attempt to fetch and display existing data
-    fetchData().then(data => {
+    fetchData().then(
+        data => {
         if (!data || !data.tasks || data.tasks.length === 0) {
-            console.warn("No tasks available.");
-        }
-        else {
-            console.log("Data fetched successfully:", data);
+                console.warn("No tasks available.");
+                
+        }else{
+             console.log("Data fetched successfully:", data);
             displayTodos(data.tasks);
         }
-    }, error => {
-        console.error("Error fetching data:", error);
-        alert(error);
-    });
+           
+        },
+        error => {
+            console.error("Error fetching data:", error);
+            alert(error);
+        }
+    );
 }
+
 // Start the application when the script loads
 initializeApp();
