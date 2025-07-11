@@ -17,6 +17,7 @@ interface MockData{
     tasks: Todo[];
 }
 
+let root = document.querySelector("#root");
 let mockDataString: string | null =  localStorage.getItem("mockData");
 let mockData: MockData = mockDataString ? JSON.parse(mockDataString) : { tasks: [] };
 
@@ -49,7 +50,6 @@ function displayTodos(todos:Todo[]) {
     // Create the main ul container
     let ul = document.createElement("ul");
     ul.className = "todo-list";
-
     // Map each todo to a list item element
     let todoList = todos.map(todo => {
         let li = document.createElement("li");
@@ -59,16 +59,87 @@ function displayTodos(todos:Todo[]) {
                             <option value="not-done" ${!todo.completed ? "selected" : ""}>Not Completed</option>
                             <option value="done" ${todo.completed ? "selected" : ""}>Completed</option>
                         </select>
-                        
                         <button class="delete">Delete</button>`;
         return li;
     });
     
     // Append all list items to the ul container
     todoList.forEach(li => ul.appendChild(li));
-    
+
+    let titleElements = ul?.querySelectorAll(".title");
+    titleElements.forEach(titleElement => {
+        titleElement.addEventListener("dblclick", handleEdit)
+    })
     // Add the complete list to the root element
-    document.querySelector("#root")?.appendChild(ul);
+    root?.appendChild(ul);
+
+}
+
+/**
+ * Handles Task edit
+ */
+function handleEdit(event:Event){
+    console.log("title  button double clicked");
+
+    let titleElement = event.target as HTMLElement;
+    let listItem = titleElement.closest("li");
+    // Create input field for editing
+    let editInpuField = document.createElement("input");
+    editInpuField.className = "edit-input";
+    editInpuField.type = "text";
+    editInpuField.value = titleElement.textContent?.trim() || ""; // Use empty string if null
+
+    // Create a cancel edit button
+    let saveEdit = document.createElement("button");
+    saveEdit.textContent = "Save Edit";
+    saveEdit.className = "save-edit";
+
+    let saveEditFunc = () => {
+        let newTitle = editInpuField.value.trim();
+            if (newTitle) {
+                // Update the title in the list item
+                titleElement!.textContent = newTitle;
+                
+                // Update the todo data in localStorage
+                let taskId = parseInt(listItem!.id);
+                let mostRecentDataString:string | null = localStorage.getItem("mockData")
+                let mostRecentData: MockData  = mostRecentDataString? JSON.parse(mostRecentDataString) : {tasks:[]};
+                 mostRecentData.tasks = mostRecentData.tasks.map(task => {
+                    if (task.id === taskId) {
+                        return { ...task, title: newTitle };
+                    }
+                    return task;
+                 });
+                localStorage.setItem("mockData", JSON.stringify(mostRecentData));
+                mockData = mostRecentData; // Update local reference
+                refreshTodoDisplay();
+                
+            }else{
+                alert("Title cannot be empty!");
+            }
+        }
+    saveEdit.addEventListener("click", () => {
+        editInpuField.replaceWith(titleElement!);
+        saveEdit.remove();
+        saveEditFunc();
+
+        
+    });
+
+    //Handles the saving of an edited task
+
+    editInpuField.addEventListener("keydown", (event) => {
+        if(event.key === "Enter") {
+            saveEditFunc();
+        }
+    })
+
+    editInpuField.addEventListener("blur", (event) => {
+            saveEditFunc();
+    })
+
+    titleElement?.replaceWith(editInpuField);
+    editInpuField.focus();
 }
 
 /**
@@ -85,8 +156,8 @@ function setupUI() {
     addTask.className = "add-task";
     
     // Append main elements to the DOM
-    document.querySelector("#root")?.appendChild(heading);
-    document.querySelector("#root")?.appendChild(addTask);
+    root?.appendChild(heading);
+    root?.appendChild(addTask);
     
     // Setup event listeners after elements are created
     setupEventListeners(addTask);

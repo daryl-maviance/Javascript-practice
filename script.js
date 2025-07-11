@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+let root = document.querySelector("#root");
 let mockDataString = localStorage.getItem("mockData");
 let mockData = mockDataString ? JSON.parse(mockDataString) : { tasks: [] };
 /**
@@ -40,7 +41,6 @@ function fetchData() {
  * @param {Array} todos - Array of todo objects to display
  */
 function displayTodos(todos) {
-    var _a;
     // Create the main ul container
     let ul = document.createElement("ul");
     ul.className = "todo-list";
@@ -53,20 +53,79 @@ function displayTodos(todos) {
                             <option value="not-done" ${!todo.completed ? "selected" : ""}>Not Completed</option>
                             <option value="done" ${todo.completed ? "selected" : ""}>Completed</option>
                         </select>
-                        
                         <button class="delete">Delete</button>`;
         return li;
     });
     // Append all list items to the ul container
     todoList.forEach(li => ul.appendChild(li));
+    let titleElements = ul === null || ul === void 0 ? void 0 : ul.querySelectorAll(".title");
+    titleElements.forEach(titleElement => {
+        titleElement.addEventListener("dblclick", handleEdit);
+    });
     // Add the complete list to the root element
-    (_a = document.querySelector("#root")) === null || _a === void 0 ? void 0 : _a.appendChild(ul);
+    root === null || root === void 0 ? void 0 : root.appendChild(ul);
+}
+/**
+ * Handles Task edit
+ */
+function handleEdit(event) {
+    var _a;
+    console.log("title  button double clicked");
+    let titleElement = event.target;
+    let listItem = titleElement.closest("li");
+    // Create input field for editing
+    let editInpuField = document.createElement("input");
+    editInpuField.className = "edit-input";
+    editInpuField.type = "text";
+    editInpuField.value = ((_a = titleElement.textContent) === null || _a === void 0 ? void 0 : _a.trim()) || ""; // Use empty string if null
+    // Create a cancel edit button
+    let saveEdit = document.createElement("button");
+    saveEdit.textContent = "Save Edit";
+    saveEdit.className = "save-edit";
+    let saveEditFunc = () => {
+        let newTitle = editInpuField.value.trim();
+        if (newTitle) {
+            // Update the title in the list item
+            titleElement.textContent = newTitle;
+            // Update the todo data in localStorage
+            let taskId = parseInt(listItem.id);
+            let mostRecentDataString = localStorage.getItem("mockData");
+            let mostRecentData = mostRecentDataString ? JSON.parse(mostRecentDataString) : { tasks: [] };
+            mostRecentData.tasks = mostRecentData.tasks.map(task => {
+                if (task.id === taskId) {
+                    return Object.assign(Object.assign({}, task), { title: newTitle });
+                }
+                return task;
+            });
+            localStorage.setItem("mockData", JSON.stringify(mostRecentData));
+            mockData = mostRecentData; // Update local reference
+            refreshTodoDisplay();
+        }
+        else {
+            alert("Title cannot be empty!");
+        }
+    };
+    saveEdit.addEventListener("click", () => {
+        editInpuField.replaceWith(titleElement);
+        saveEdit.remove();
+        saveEditFunc();
+    });
+    //Handles the saving of an edited task
+    editInpuField.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+            saveEditFunc();
+        }
+    });
+    editInpuField.addEventListener("blur", (event) => {
+        saveEditFunc();
+    });
+    titleElement === null || titleElement === void 0 ? void 0 : titleElement.replaceWith(editInpuField);
+    editInpuField.focus();
 }
 /**
  * Creates and sets up the main UI elements
  */
 function setupUI() {
-    var _a, _b;
     // Create heading
     let heading = document.createElement("h1");
     heading.textContent = "Todo List";
@@ -75,8 +134,8 @@ function setupUI() {
     addTask.textContent = "Add Task";
     addTask.className = "add-task";
     // Append main elements to the DOM
-    (_a = document.querySelector("#root")) === null || _a === void 0 ? void 0 : _a.appendChild(heading);
-    (_b = document.querySelector("#root")) === null || _b === void 0 ? void 0 : _b.appendChild(addTask);
+    root === null || root === void 0 ? void 0 : root.appendChild(heading);
+    root === null || root === void 0 ? void 0 : root.appendChild(addTask);
     // Setup event listeners after elements are created
     setupEventListeners(addTask);
 }
