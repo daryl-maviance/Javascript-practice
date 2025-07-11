@@ -33,7 +33,7 @@ async function fetchData(): Promise<MockData> {
             // Simulate network delay
             setTimeout(function() {
                 resolve(mockData);
-            }, 2000);
+            }, 1000);
         }
     });
 }
@@ -54,7 +54,7 @@ function displayTodos(todos:Todo[]) {
     let todoList = todos.map(todo => {
         let li = document.createElement("li");
         li.setAttribute("id", todo.id.toString());
-        li.innerHTML = `<strong class="title"> ${todo.title} </strong> - 
+        li.innerHTML = `<strong class="title"> ${todo.title} </strong> 
                         <select class="status-select ${todo.completed ? "done" : "not-done"}" data-task-id="${todo.id}"> 
                             <option value="not-done" ${!todo.completed ? "selected" : ""}>Not Completed</option>
                             <option value="done" ${todo.completed ? "selected" : ""}>Completed</option>
@@ -149,14 +149,20 @@ function setupUI() {
     // Create heading
     let heading = document.createElement("h1");
     heading.textContent = "Todo List";
+
+    let instructions = document.createElement('em')
+    instructions.textContent ="Double tap on the  Ttle  to edit "
     
     // Create add task button
     let addTask = document.createElement("button");
     addTask.textContent = "Add Task";
     addTask.className = "add-task";
+
+
     
     // Append main elements to the DOM
     root?.appendChild(heading);
+    root?.appendChild(instructions)
     root?.appendChild(addTask);
     
     // Setup event listeners after elements are created

@@ -188,6 +188,11 @@ body {
     outline: none;
 }
 
+.title{
+    width: 30%;
+    word-wrap: break-word;
+}
+
 @media (max-width: 600px) {
     .todo-list {
         width: 96%;
