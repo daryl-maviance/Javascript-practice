@@ -151,7 +151,7 @@ function setupUI() {
     heading.textContent = "Todo List";
 
     let instructions = document.createElement('em')
-    instructions.textContent ="Double tap on the  Ttle  to edit "
+    instructions.textContent ="Double tap on the Title  of a task to edit"
     
     // Create add task button
     let addTask = document.createElement("button");
