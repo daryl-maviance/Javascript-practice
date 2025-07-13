@@ -13,6 +13,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 let root = document.querySelector("#root");
 let storedDataString = localStorage.getItem("storedData");
 let storedData = storedDataString ? JSON.parse(storedDataString) : { tasks: [] };
+let instructionsElement = document.createElement('em');
 // User name initialization
 let name = localStorage.getItem("name");
 if (!name) {
@@ -76,10 +77,12 @@ function refreshTodoDisplay() {
     (_a = document.querySelector(".todo-list")) === null || _a === void 0 ? void 0 : _a.remove();
     // Display updated todos
     if (storedData.tasks.length === 0) {
+        instructionsElement.textContent = "No tasks available. Please add a task.";
         console.warn("No tasks available.");
         alert("No tasks available.");
     }
     else {
+        instructionsElement.textContent = "Double tap on the Title of a task to edit";
         displayTodos(storedData.tasks);
     }
 }
@@ -121,13 +124,17 @@ function displayTodos(todos) {
  */
 function setupUI() {
     root === null || root === void 0 ? void 0 : root.appendChild(header);
-    let instructions = document.createElement('em');
-    instructions.textContent = "Double tap on the Title of a task to edit";
     // Create add task button
     let addTask = document.createElement("button");
     addTask.textContent = "Add Task";
     addTask.className = "add-task";
-    root === null || root === void 0 ? void 0 : root.appendChild(instructions);
+    if (storedData.tasks.length === 0) {
+        instructionsElement.textContent = "No tasks available. Please add a task.";
+    }
+    else {
+        instructionsElement.textContent = "Double tap on the Title of a task to edit";
+    }
+    root === null || root === void 0 ? void 0 : root.appendChild(instructionsElement);
     root === null || root === void 0 ? void 0 : root.appendChild(addTask);
     root === null || root === void 0 ? void 0 : root.appendChild(footer);
     // Setup event listeners after elements are created

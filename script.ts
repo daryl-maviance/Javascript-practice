@@ -7,6 +7,7 @@ import { Todo, StoredData } from "./types";
 let root = document.querySelector("#root");
 let storedDataString: string | null = localStorage.getItem("storedData");
 let storedData: StoredData = storedDataString ? JSON.parse(storedDataString) : { tasks: [] };
+let instructionsElement = document.createElement('em');
 
 // User name initialization
 let name = localStorage.getItem("name");
@@ -38,7 +39,7 @@ footer.innerHTML = `  <p>&copy; ${new Date().getFullYear()} daryldev. All Rights
                 <i class="fab fa-github"></i>
             </a>
         </div>`;
-        
+
 
 // ========================
 // DATA MANAGEMENT
@@ -71,12 +72,14 @@ async function fetchData(): Promise<StoredData> {
 function refreshTodoDisplay() {
     // Remove existing todo list if it exists
     document.querySelector(".todo-list")?.remove();
-    
+
     // Display updated todos
     if (storedData.tasks.length === 0) {
+        instructionsElement.textContent = "No tasks available. Please add a task.";
         console.warn("No tasks available.");
         alert("No tasks available.");
     } else {
+        instructionsElement.textContent = "Double tap on the Title of a task to edit";
         displayTodos(storedData.tasks);
     }
 }
@@ -124,17 +127,19 @@ function displayTodos(todos: Todo[]) {
  * Creates and sets up the main UI elements
  */
 function setupUI() {
-    root?.appendChild(header);
-    
-    let instructions = document.createElement('em');
-    instructions.textContent = "Double tap on the Title of a task to edit";
-    
+    root?.appendChild(header);    
     // Create add task button
     let addTask = document.createElement("button");
     addTask.textContent = "Add Task";
     addTask.className = "add-task";
 
-    root?.appendChild(instructions);
+    if(storedData.tasks.length === 0) {
+        instructionsElement.textContent = "No tasks available. Please add a task.";
+    }else {
+        instructionsElement.textContent = "Double tap on the Title of a task to edit";
+    }
+
+    root?.appendChild(instructionsElement);
     root?.appendChild(addTask);
     root?.appendChild(footer);
     
