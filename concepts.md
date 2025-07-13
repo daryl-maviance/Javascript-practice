@@ -380,14 +380,200 @@ self.addEventListener('fetch', (event) => {
     transition: box-shadow 0.2s, transform 0.2s;
 }
 ```
+### CSS !important Declaration
 
-### Pseudo-elements & Advanced Selectors
+**Definition:** The `!important` rule gives a CSS declaration the highest priority, overriding normal cascade and specificity rules.
 
-**Definition:** CSS pseudo-elements (::before, ::after) create virtual elements that can be styled without adding HTML markup.
+**Explanation:** Should be used sparingly, primarily for utility classes or when overriding third-party styles.
 
 **Project Implementation:**
 ```css
-/* Gradient overlay using pseudo-element */
+/* Ensuring brand colors always apply */
+.linkedin { color: #0077b5 !important; } /* LinkedIn blue */
+.whatsapp { color: #25d366 !important; } /* WhatsApp green */
+.youtube { color: #ff0000 !important; }  /* YouTube red */
+.github { color: #333 !important; }      /* GitHub dark gray */
+
+/* Without !important, this would override brand colors: */
+.social-links a:hover {
+    color: #667eea; /* Generic hover color */
+}
+```
+
+**When to Use:**
+- Brand-specific styling that must never change
+- Utility classes
+- Overriding third-party CSS
+
+### Box Shadow Effects
+
+**Definition:** CSS property that creates shadow effects around elements to simulate depth and elevation.
+
+**Syntax:** `box-shadow: offset-x offset-y blur-radius spread-radius color;`
+
+**Project Implementation:**
+```css
+/* Basic elevation shadow */
+.todo-list {
+    box-shadow: 0 4px 24px rgba(60, 72, 88, 0.12);
+    /* 0=no horizontal offset, 4px=down, 24px=blur, rgba=transparent gray */
+}
+
+/* Hover effect - increased elevation */
+.todo-list li:hover {
+    box-shadow: 0 8px 24px rgba(60, 72, 88, 0.18);
+    /* Higher offset and opacity for lifted effect */
+}
+
+/* Glow effect for focus states */
+.edit-input:focus {
+    box-shadow: 0 0 0 2px rgba(102,126,234,0.15);
+    /* No offset, no blur, 2px spread = glow outline */
+}
+```
+
+### CSS Transform Property
+
+**Definition:** Allows 2D and 3D transformations of elements without affecting document flow.
+
+**Common Functions:**
+- `scale()` - Resize elements
+- `rotate()` - Rotate elements
+- `translate()` - Move elements
+
+**Project Implementation:**
+```css
+/* Interactive button effects */
+.edit:hover {
+    transform: scale(1.07) rotate(2deg);
+    /* 7% larger + 2° clockwise rotation */
+}
+
+/* Lift effect for cards */
+.todo-list li:hover {
+    transform: translateY(-2px) scale(1.01);
+    /* Move up 2px + slight scale increase */
+}
+
+/* Social media hover effects */
+.social-links a:hover {
+    transform: translateY(-2px) scale(1.1);
+    /* Lift and scale for attention */
+}
+```
+
+### Z-Index and Stacking Context
+
+**Definition:** Controls the stacking order of positioned elements. Higher values appear in front of lower values.
+
+**Explanation:** Creates layered layouts where elements can overlap in a controlled manner.
+
+**Project Implementation:**
+```css
+/* Ensure header/footer stay on top */
+header, footer {
+    z-index: 1000; /* High value keeps above scrolling content */
+    position: fixed;
+}
+
+/* Layer button content above pseudo-elements */
+.save-edit {
+    z-index: 1; /* Above background effects */
+    position: relative;
+}
+
+/* Background gradient overlay */
+.todo-list li::after {
+    z-index: 0; /* Behind button content */
+    position: absolute;
+}
+```
+
+### CSS Transitions
+
+**Definition:** Creates smooth animations between CSS property changes over a specified duration.
+
+**Syntax:** `transition: property duration timing-function delay;`
+
+**Project Implementation:**
+```css
+/* Multiple property transitions */
+.delete {
+    transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+    /* Animate background, shadow, and transform over 200ms */
+}
+
+/* All properties transition */
+.social-links a {
+    transition: all 0.3s ease;
+    /* Animate any changing property smoothly */
+}
+
+/* Specific timing functions */
+.todo-list li::after {
+    transition: opacity 0.3s ease-in-out;
+    /* Smooth fade in/out for overlay */
+}
+```
+
+**Timing Functions:**
+- `ease` - Slow start, fast middle, slow end (default)
+- `linear` - Constant speed
+- `ease-in` - Slow start
+- `ease-out` - Slow end
+
+### Linear Gradients
+
+**Definition:** CSS function that creates smooth transitions between two or more colors along a straight line.
+
+**Syntax:** `linear-gradient(direction, color-stop1, color-stop2, ...)`
+
+**Project Implementation:**
+```css
+/* Horizontal gradients for buttons */
+.edit {
+    background: linear-gradient(90deg, #667eea 0%, #43cea2 100%);
+    /* 90deg = left to right, blue to teal */
+}
+
+/* Reverse gradient on hover */
+.edit:hover {
+    background: linear-gradient(90deg, #43cea2 0%, #667eea 100%);
+    /* Teal to blue - creates dynamic effect */
+}
+
+/* Diagonal background gradient */
+body {
+    background: linear-gradient(135deg, #e3e8ee 0%, #c3cfe2 100%);
+    /* 135deg = diagonal, light gray to blue-gray */
+}
+
+/* Subtle overlay gradients */
+.todo-list li::after {
+    background: linear-gradient(90deg, rgba(102,126,234,0.08) 0%, rgba(118,75,162,0.08) 100%);
+    /* Transparent gradient for hover effects */
+}
+```
+
+**Gradient Directions:**
+- `90deg` - Left to right
+- `180deg` - Top to bottom
+- `45deg` - Diagonal top-left to bottom-right
+- `135deg` - Diagonal top-right to bottom-left
+
+### CSS ::after Pseudo-element
+
+**Definition:** The `::after` pseudo-element creates a virtual element that is the last child of the selected element, allowing you to insert content without adding HTML markup.
+
+**Key Properties:**
+- **Required:** `content` property (can be empty string `""`)
+- **Positioning:** Usually needs `position: absolute` for overlays
+- **Stacking:** Use `z-index` to control layering
+- **Interaction:** Use `pointer-events: none` to prevent blocking clicks
+
+**Project Implementation:**
+```css
+/* Gradient overlay effect on todo items */
 .todo-list li::after {
     content: "";
     position: absolute;
@@ -395,11 +581,47 @@ self.addEventListener('fetch', (event) => {
     background: linear-gradient(90deg, rgba(102,126,234,0.08) 0%, rgba(118,75,162,0.08) 100%);
     opacity: 0;
     transition: opacity 0.3s;
+    z-index: 0;
     pointer-events: none;
 }
 
+/* Show gradient overlay on hover */
 .todo-list li:hover::after {
     opacity: 1;
+}
+```
+
+**How Your Implementation Works:**
+1. **Creates virtual element** after each todo item
+2. **Covers entire parent** using absolute positioning (`left: 0; top: 0; right: 0; bottom: 0`)
+3. **Starts invisible** with `opacity: 0`
+4. **Fades in smoothly** on hover using `transition: opacity 0.3s`
+5. **Stays behind content** with `z-index: 0`
+6. **Doesn't interfere** with clicks due to `pointer-events: none`
+
+**Supporting CSS in Your Project:**
+```css
+/* Parent container that makes ::after positioning work */
+.todo-list li {
+    position: relative;  /* Creates positioning context for ::after */
+    overflow: hidden;    /* Keeps overlay contained within bounds */
+}
+```
+
+### Pseudo-elements & Advanced Selectors
+
+**Definition:** CSS pseudo-elements (::before, ::after) create virtual elements that can be styled without adding HTML markup.
+
+**Advanced Combinations:**
+```css
+/* Multiple pseudo-elements */
+.element::before { content: "★ "; }  /* Star before */
+.element::after { content: " ★"; }   /* Star after */
+
+/* Conditional pseudo-elements */
+.todo-item.completed::after {
+    content: "✓";                    /* Checkmark for completed */
+    color: green;
 }
 ```
 
