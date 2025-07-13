@@ -1,3 +1,8 @@
+/* ========================
+   GLOBAL STYLES & LAYOUT
+   ======================== */
+
+/* Main body styling with gradient background and fixed header/footer spacing */
 body {
     display: flex;
     flex-direction: column;
@@ -5,12 +10,20 @@ body {
     background: linear-gradient(135deg, #e3e8ee 0%, #c3cfe2 100%);
     font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
     color: #222;
+    padding-top: 80px; /* Space for fixed header */
+    padding-bottom: 120px; /* Space for fixed footer */
     min-height: 100vh;
+    margin: 0;
 }
 
+/* ========================
+   TODO LIST CONTAINER
+   ======================== */
+
+/* Main todo list container with card-like appearance */
 .todo-list {
     width: 600px;
-    margin-top: 40px;
+    margin-top: 0px;
     padding: 24px;
     background: #fff;
     box-shadow: 0 4px 24px rgba(60, 72, 88, 0.12);
@@ -19,6 +32,7 @@ body {
     border: 1px solid #d1d9e6;
 }
 
+/* Individual todo item styling with hover effects */
 .todo-list li {
     display: flex;
     justify-content: space-between;
@@ -33,11 +47,13 @@ body {
     overflow: hidden;
 }
 
+/* Hover effect for todo items - lift and scale */
 .todo-list li:hover {
     box-shadow: 0 8px 24px rgba(60, 72, 88, 0.18);
     transform: translateY(-2px) scale(1.01);
 }
 
+/* Gradient overlay effect on hover using pseudo-element */
 .todo-list li::after {
     content: "";
     position: absolute;
@@ -49,10 +65,16 @@ body {
     pointer-events: none;
 }
 
+/* Show gradient overlay on hover */
 .todo-list li:hover::after {
     opacity: 1;
 }
 
+/* ========================
+   STATUS SELECTORS & DROPDOWNS
+   ======================== */
+
+/* Completed task status styling - green theme */
 .done {
     border-radius: 8px;
     background: linear-gradient(90deg, #c3f0e8 0%, #a3e4d7 100%);
@@ -65,11 +87,13 @@ body {
     z-index: 1;
 }
 
+/* Hover effect for completed tasks */
 .done:hover {
     background: linear-gradient(90deg, #a3e4d7 0%, #c3f0e8 100%);
     box-shadow: 0 4px 16px rgba(33,136,56,0.14);
 }
 
+/* Incomplete task status styling - red theme */
 .not-done {
     background: linear-gradient(90deg, #ffe0e0 0%, #ffd6d6 100%);
     color: #c82333;
@@ -82,11 +106,17 @@ body {
     z-index: 1;
 }
 
+/* Hover effect for incomplete tasks */
 .not-done:hover {
     background: linear-gradient(90deg, #ffd6d6 0%, #ffe0e0 100%);
     box-shadow: 0 4px 16px rgba(200,35,51,0.14);
 }
 
+/* ========================
+   ACTION BUTTONS
+   ======================== */
+
+/* Delete button styling with red-purple gradient */
 .delete {
     padding: 8px 14px;
     border-radius: 8px;
@@ -100,6 +130,7 @@ body {
     z-index: 1;
 }
 
+/* Delete button hover - reverse gradient and add rotation */
 .delete:hover {
     background: linear-gradient(90deg, #764ba2 0%, #ff5f6d 100%);
     color: #fff;
@@ -108,6 +139,7 @@ body {
     transform: scale(1.07) rotate(-2deg);
 }
 
+/* Edit button styling with blue-teal gradient */
 .edit {
     background: linear-gradient(90deg, #667eea 0%, #43cea2 100%);
     color: #fff;
@@ -121,6 +153,7 @@ body {
     z-index: 1;
 }
 
+/* Edit button hover - reverse gradient and add rotation */
 .edit:hover {
     background: linear-gradient(90deg, #43cea2 0%, #667eea 100%);
     color: #fff;
@@ -129,6 +162,7 @@ body {
     transform: scale(1.07) rotate(2deg);
 }
 
+/* Save edit button styling with yellow-orange gradient */
 .save-edit {
     background: linear-gradient(90deg, #ffd200 0%, #f7971e 100%);
     color: #222;
@@ -142,6 +176,7 @@ body {
     z-index: 1;
 }
 
+/* Save edit button hover - reverse gradient and add rotation */
 .save-edit:hover {
     background: linear-gradient(90deg, #f7971e 0%, #ffd200 100%);
     color: #222;
@@ -150,12 +185,13 @@ body {
     transform: scale(1.07) rotate(-2deg);
 }
 
+/* Add task button - primary action button */
 .add-task {
     padding: 12px 20px;
     border-radius: 10px;
-    margin-top: 40px;
+    margin-top: 20px;
     border: none;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     background: linear-gradient(90deg, #667eea 0%, #43cea2 100%);
     color: #fff;
     font-weight: 600;
@@ -164,6 +200,7 @@ body {
     transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
 }
 
+/* Add task button hover - reverse gradient and scale up */
 .add-task:hover {
     background: linear-gradient(90deg, #43cea2 0%, #667eea 100%);
     cursor: pointer;
@@ -171,6 +208,11 @@ body {
     transform: scale(1.04);
 }
 
+/* ========================
+   FORM INPUTS & EDITING
+   ======================== */
+
+/* Input field for editing task titles */
 .edit-input {
     padding: 7px 12px;
     border-radius: 8px;
@@ -182,25 +224,128 @@ body {
     transition: border-color 0.2s, box-shadow 0.2s;
 }
 
+/* Focus state for edit input - blue border and glow */
 .edit-input:focus {
     border-color: #667eea;
     box-shadow: 0 0 0 2px rgba(102,126,234,0.15);
     outline: none;
 }
 
-.title{
-    width: 30%;
-    word-wrap: break-word;
+/* Task title styling with edit icon indicator */
+.title {
+  width: 30%;
+  padding-right: 30px; /* space for the edit icon */
+  overflow-wrap: break-word;
+  background-image: url('images/edit.png');
+  background-repeat: no-repeat;
+  background-size: 18px 18px; /* scales the edit icon */
+  background-position: right center;
 }
 
+/* ========================
+   HEADER & FOOTER LAYOUT
+   ======================== */
+
+/* Fixed header at top of page */
+header {
+    width: 100%;
+    padding: 15px 20px;
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000; /* Ensure header stays above other content */
+    height: 30px; /* Fixed height for consistency */
+}
+
+/* Fixed footer at bottom of page */
+footer {
+    width: 100%;
+    padding: 20px;
+    background: #fff;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 1000; /* Ensure footer stays above other content */
+    height: 30px; /* Minimum height for consistency */
+}
+
+/* Footer text styling */
+footer p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #666;
+    font-weight: 500;
+}
+
+/* ========================
+   SOCIAL MEDIA LINKS
+   ======================== */
+
+/* Container for social media icons */
+.social-links {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+/* Individual social media link styling - circular icons */
+.social-links a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: #666;
+    font-size: 1.2rem;
+}
+
+/* Hover effect for social links - lift and scale with glow */
+.social-links a:hover {
+    transform: translateY(-2px) scale(1.1);
+    color: #667eea;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+}
+
+/* Platform-specific hover colors for brand recognition */
+.linkedin { color: #0077b5 !important; } /* LinkedIn blue */
+.whatsapp { color: #25d366 !important; } /* WhatsApp green */
+.youtube { color: #ff0000 !important; }  /* YouTube red */
+.github { color: #333 !important; }      /* GitHub dark gray */
+
+/* ========================
+   RESPONSIVE DESIGN - MOBILE
+   ======================== */
+
+/* Mobile styles for screens 600px and smaller */
 @media (max-width: 600px) {
+    /* Adjust body spacing for mobile header/footer heights */
+    body {
+        padding-top: 100px; /* More space for taller mobile header */
+        padding-bottom: 140px; /* More space for taller mobile footer */
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+    
+    /* Make todo list responsive - fit mobile screens */
     .todo-list {
         width: 96%;
         max-width: 380px;
         padding: 16px;
         border-radius: 12px;
+        margin-top: 10px;
     }
     
+    /* Stack todo item elements vertically on mobile */
     .todo-list li {
         flex-direction: column;
         gap: 12px;
@@ -208,13 +353,53 @@ body {
         padding: 12px;
     }
     
+    /* Make add task button full width on mobile */
     .add-task {
         width: 96%;
         max-width: 380px;
         font-size: 1rem;
+        margin-top: 10px;
     }
     
-    body {
-        padding: 12px;
+    /* Mobile header - stack content vertically */
+    header {
+        padding: 10px 15px;
+        height: 60px; /* Taller header to accommodate stacked content */
+        flex-direction: column;
+        text-align: center;
+    }
+  
+    /* Smaller welcome message on mobile */
+    header strong {
+        font-size: 0.9rem;
+        margin-top: 5px;
+        margin-right: 10%; /* Add some right margin for spacing */
+    }
+    
+    /* Mobile footer - stack content vertically */
+    footer {
+        flex-direction: column;
+        gap: 12px;
+        padding: 16px;
+        text-align: center;
+        min-height: 80px; /* Taller footer for stacked content */
+    }
+    
+    /* Smaller footer text on mobile */
+    footer p {
+        font-size: 0.8rem;
+    }
+    
+    /* Smaller social media icons on mobile */
+    .social-links a {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+        margin-right: 0; /* Remove extra margin on mobile */
+    }
+    
+    /* Tighter spacing between social icons on mobile */
+    .social-links {
+        gap: 12px;
     }
 }

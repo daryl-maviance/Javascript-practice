@@ -1,7 +1,3 @@
-"use strict";
-// ========================
-// DATA MANAGEMENT
-// ========================
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -11,27 +7,81 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+// ========================
+// GLOBAL VARIABLES & DOM ELEMENTS
+// ========================
 let root = document.querySelector("#root");
-let mockDataString = localStorage.getItem("mockData");
-let mockData = mockDataString ? JSON.parse(mockDataString) : { tasks: [] };
+let storedDataString = localStorage.getItem("storedData");
+let storedData = storedDataString ? JSON.parse(storedDataString) : { tasks: [] };
+// User name initialization
+let name = localStorage.getItem("name");
+if (!name) {
+    name = prompt("Please enter your name:");
+    while (!name || name.trim() === "") {
+        name = prompt("Name cannot be empty. Please enter your name:");
+    }
+    localStorage.setItem("name", name);
+}
+// Create header and footer elements
+let header = document.createElement("header");
+let footer = document.createElement("footer");
+header.innerHTML = `
+                   <strong>Hello, ${name} welcome to    Your Todo App!</strong>`;
+footer.innerHTML = `  <p>&copy; ${new Date().getFullYear()} daryldev. All Rights Reserved.</p>
+        <div class="social-links">
+            <a href="https://www.linkedin.com/in/nfoye-djomo-daryl-dewilde-0ba897311/" target="_blank" class="linkedin">
+                <i class="fab fa-linkedin"></i>
+            </a>
+            <a href="https://wa.me/237699255753" target="_blank" class="whatsapp">
+                <i class="fab fa-whatsapp"></i>
+            </a>
+            <a href="https://youtube.com/@daryldev" target="_blank" class="youtube" >
+                <i class="fab fa-youtube"></i>
+            </a>
+            <a href="https://github.com/daryldewilde" target="_blank" class="github">
+                <i class="fab fa-github"></i>
+            </a>
+        </div>`;
+// ========================
+// DATA MANAGEMENT
+// ========================
 /**
  * Simulates an asynchronous data fetch operation
- * @returns {Promise} Promise that resolves with mockData or rejects if no data
+ * @returns {Promise} Promise that resolves with storedData or rejects if no data
  */
 function fetchData() {
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise((resolve, reject) => {
-            if (!mockData) {
+            if (!storedData) {
                 reject("No data available");
             }
             else {
                 // Simulate network delay
                 setTimeout(function () {
-                    resolve(mockData);
+                    resolve(storedData);
                 }, 1000);
             }
         });
     });
+}
+// ========================
+// UTILITY FUNCTIONS
+// ========================
+/**
+ * Refreshes the todo list display by removing the old list and creating a new one
+ */
+function refreshTodoDisplay() {
+    var _a;
+    // Remove existing todo list if it exists
+    (_a = document.querySelector(".todo-list")) === null || _a === void 0 ? void 0 : _a.remove();
+    // Display updated todos
+    if (storedData.tasks.length === 0) {
+        console.warn("No tasks available.");
+        alert("No tasks available.");
+    }
+    else {
+        displayTodos(storedData.tasks);
+    }
 }
 // ========================
 // UI RENDERING FUNCTIONS
@@ -58,38 +108,52 @@ function displayTodos(todos) {
     });
     // Append all list items to the ul container
     todoList.forEach(li => ul.appendChild(li));
+    // Add event listeners to title elements for editing
     let titleElements = ul === null || ul === void 0 ? void 0 : ul.querySelectorAll(".title");
     titleElements.forEach(titleElement => {
         titleElement.addEventListener("dblclick", handleEdit);
     });
     // Add the complete list to the root element
-    root === null || root === void 0 ? void 0 : root.appendChild(ul);
+    root === null || root === void 0 ? void 0 : root.insertBefore(ul, footer);
+}
+/**
+ * Creates and sets up the main UI elements
+ */
+function setupUI() {
+    root === null || root === void 0 ? void 0 : root.appendChild(header);
+    let instructions = document.createElement('em');
+    instructions.textContent = "Double tap on the Title of a task to edit";
+    // Create add task button
+    let addTask = document.createElement("button");
+    addTask.textContent = "Add Task";
+    addTask.className = "add-task";
+    root === null || root === void 0 ? void 0 : root.appendChild(instructions);
+    root === null || root === void 0 ? void 0 : root.appendChild(addTask);
+    root === null || root === void 0 ? void 0 : root.appendChild(footer);
+    // Setup event listeners after elements are created
+    setupEventListeners(addTask);
 }
 /**
  * Handles Task edit
  */
 function handleEdit(event) {
     var _a;
-    console.log("title  button double clicked");
+    console.log("title button double clicked");
     let titleElement = event.target;
     let listItem = titleElement.closest("li");
     // Create input field for editing
-    let editInpuField = document.createElement("input");
-    editInpuField.className = "edit-input";
-    editInpuField.type = "text";
-    editInpuField.value = ((_a = titleElement.textContent) === null || _a === void 0 ? void 0 : _a.trim()) || ""; // Use empty string if null
-    // Create a cancel edit button
-    let saveEdit = document.createElement("button");
-    saveEdit.textContent = "Save Edit";
-    saveEdit.className = "save-edit";
+    let editInputField = document.createElement("input");
+    editInputField.className = "edit-input";
+    editInputField.type = "text";
+    editInputField.value = ((_a = titleElement.textContent) === null || _a === void 0 ? void 0 : _a.trim()) || ""; // Use empty string if null
     let saveEditFunc = () => {
-        let newTitle = editInpuField.value.trim();
+        let newTitle = editInputField.value.trim();
         if (newTitle) {
             // Update the title in the list item
             titleElement.textContent = newTitle;
             // Update the todo data in localStorage
             let taskId = parseInt(listItem.id);
-            let mostRecentDataString = localStorage.getItem("mockData");
+            let mostRecentDataString = localStorage.getItem("storedData");
             let mostRecentData = mostRecentDataString ? JSON.parse(mostRecentDataString) : { tasks: [] };
             mostRecentData.tasks = mostRecentData.tasks.map(task => {
                 if (task.id === taskId) {
@@ -97,50 +161,26 @@ function handleEdit(event) {
                 }
                 return task;
             });
-            localStorage.setItem("mockData", JSON.stringify(mostRecentData));
-            mockData = mostRecentData; // Update local reference
+            localStorage.setItem("storedData", JSON.stringify(mostRecentData));
+            storedData = mostRecentData; // Update local reference
             refreshTodoDisplay();
         }
         else {
             alert("Title cannot be empty!");
         }
     };
-    saveEdit.addEventListener("click", () => {
-        editInpuField.replaceWith(titleElement);
-        saveEdit.remove();
-        saveEditFunc();
-    });
-    //Handles the saving of an edited task
-    editInpuField.addEventListener("keydown", (event) => {
+    // Handle saving with Enter key
+    editInputField.addEventListener("keydown", (event) => {
         if (event.key === "Enter") {
             saveEditFunc();
         }
     });
-    editInpuField.addEventListener("blur", (event) => {
+    // Handle saving when input loses focus
+    editInputField.addEventListener("blur", () => {
         saveEditFunc();
     });
-    titleElement === null || titleElement === void 0 ? void 0 : titleElement.replaceWith(editInpuField);
-    editInpuField.focus();
-}
-/**
- * Creates and sets up the main UI elements
- */
-function setupUI() {
-    // Create heading
-    let heading = document.createElement("h1");
-    heading.textContent = "Todo List";
-    let instructions = document.createElement('em');
-    instructions.textContent = "Double tap on the Title  of a task to edit";
-    // Create add task button
-    let addTask = document.createElement("button");
-    addTask.textContent = "Add Task";
-    addTask.className = "add-task";
-    // Append main elements to the DOM
-    root === null || root === void 0 ? void 0 : root.appendChild(heading);
-    root === null || root === void 0 ? void 0 : root.appendChild(instructions);
-    root === null || root === void 0 ? void 0 : root.appendChild(addTask);
-    // Setup event listeners after elements are created
-    setupEventListeners(addTask);
+    titleElement === null || titleElement === void 0 ? void 0 : titleElement.replaceWith(editInputField);
+    editInputField.focus();
 }
 // ========================
 // EVENT HANDLING
@@ -156,7 +196,7 @@ function setupEventListeners(addTaskButton) {
     document.addEventListener("click", handleDeleteTask);
     // Status change handler (using event delegation)
     document.addEventListener("change", handleStatusChange);
-    console.log("settting  up event listeners");
+    console.log("setting up event listeners");
 }
 /**
  * Handles adding a new task
@@ -166,13 +206,13 @@ function handleAddTask() {
     if (newTask) {
         // Create new todo object
         let newTodo = {
-            id: mockData.tasks.length + 1,
+            id: storedData.tasks.length + 1,
             title: newTask,
             completed: false
         };
         // Add to data and save to localStorage
-        mockData.tasks.push(newTodo);
-        localStorage.setItem("mockData", JSON.stringify(mockData));
+        storedData.tasks.push(newTodo);
+        localStorage.setItem("storedData", JSON.stringify(storedData));
         // Refresh the display
         refreshTodoDisplay();
     }
@@ -192,13 +232,13 @@ function handleDeleteTask(event) {
         if (!confirmDelete)
             return; // Exit if user cancels
         let taskId = target.closest("li").id;
-        let mostRecentDataString = localStorage.getItem("mockData");
+        let mostRecentDataString = localStorage.getItem("storedData");
         let mostRecentData = mostRecentDataString ? JSON.parse(mostRecentDataString) : { tasks: [] };
         // Filter out the task to be deleted
         mostRecentData.tasks = mostRecentData.tasks.filter(task => task.id.toString() != taskId);
         // Save updated data and refresh display
-        localStorage.setItem("mockData", JSON.stringify(mostRecentData));
-        mockData = mostRecentData; // Update local reference
+        localStorage.setItem("storedData", JSON.stringify(mostRecentData));
+        storedData = mostRecentData; // Update local reference
         refreshTodoDisplay();
     }
 }
@@ -213,36 +253,17 @@ function handleStatusChange(event) {
         let taskId = parseInt(target.dataset.taskId);
         let newStatus = target.value === "done"; // "done" = true, "not-done" = false
         // Get current data from localStorage
-        let mostRecentDataString = localStorage.getItem("mockData");
+        let mostRecentDataString = localStorage.getItem("storedData");
         let mostRecentData = mostRecentDataString ? JSON.parse(mostRecentDataString) : { tasks: [] };
         // Find and update the task
         let taskToUpdate = mostRecentData.tasks.find(task => task.id === taskId);
         if (taskToUpdate) {
             taskToUpdate.completed = newStatus;
             // Save updated data and refresh display
-            localStorage.setItem("mockData", JSON.stringify(mostRecentData));
-            mockData = mostRecentData; // Update local reference
+            localStorage.setItem("storedData", JSON.stringify(mostRecentData));
+            storedData = mostRecentData; // Update local reference
             refreshTodoDisplay();
         }
-    }
-}
-// ========================
-// UTILITY FUNCTIONS
-// ========================
-/**
- * Refreshes the todo list display by removing the old list and creating a new one
- */
-function refreshTodoDisplay() {
-    var _a;
-    // Remove existing todo list if it exists
-    (_a = document.querySelector(".todo-list")) === null || _a === void 0 ? void 0 : _a.remove();
-    // Display updated todos
-    if (mockData.tasks.length === 0) {
-        console.warn("No tasks available.");
-        alert("No tasks available.");
-    }
-    else {
-        displayTodos(mockData.tasks);
     }
 }
 // ========================
@@ -252,10 +273,10 @@ function refreshTodoDisplay() {
  * Initialize the application
  */
 function initializeApp() {
-    //register  the  service worker
+    // Register the service worker
     if ("serviceWorker" in navigator) {
         navigator.serviceWorker.register('/service-worker.js')
-            .then(() => console.log("service  worker registered"))
+            .then(() => console.log("service worker registered"))
             .catch(error => console.error("Service worker registration failed:", error));
     }
     // Setup the main UI elements
@@ -276,3 +297,5 @@ function initializeApp() {
 }
 // Start the application when the script loads
 initializeApp();
+export {};
+//# sourceMappingURL=script.js.map
