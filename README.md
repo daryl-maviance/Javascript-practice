@@ -11,17 +11,17 @@ A basic TypeScript todo list application for learning web development fundamenta
 - Basic responsive design
 - Simple PWA setup
 
-## 🚀 Live Demo
+## Live Demo
 
 Check out the live application: [Todo List App](https://daryl-todo-list.netlify.app/)
 
-## 📸 Screenshots
+## Screenshots
 
 ### Desktop View
-![Desktop Preview](./images/preview.png)
+<img src="./images/preview.png" alt="Desktop Preview" width="100%" />
 
 ### Mobile View
-![Mobile Preview](./images/preview_mobile.jpeg)
+<img src="./images/preview_mobile.jpeg" alt="Mobile Preview" width="30%" />
 
 ## Technologies Used
 
