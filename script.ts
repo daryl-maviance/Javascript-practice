@@ -57,7 +57,7 @@ async function fetchData(): Promise<StoredData> {
             // Simulate network delay
             setTimeout(function() {
                 resolve(storedData);
-            }, 1000);
+            }, 500);
         }
     });
 }

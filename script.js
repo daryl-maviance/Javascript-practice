@@ -60,7 +60,7 @@ function fetchData() {
                 // Simulate network delay
                 setTimeout(function () {
                     resolve(storedData);
-                }, 1000);
+                }, 500);
             }
         });
     });
